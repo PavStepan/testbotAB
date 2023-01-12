@@ -14,7 +14,6 @@ def start(update, _):
 
 def button(update, _):
     query = update.callback_query
-    variant = query.data
 
     query.answer()
     query.edit_message_text(text='B')
