@@ -1,8 +1,8 @@
 ## Установка
-    'pip install requrements'
+    pip install -r requrements
 
 ## Запуск
-    'python main.py'
+    python main.py
 
 
 ## Ссылка на бота
