@@ -1,23 +1,23 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CallbackQueryHandler, ConversationHandler
+from telegram.ext import Updater, CallbackQueryHandler, ConversationHandler, ApplicationBuilder
 from telegram.ext import CommandHandler
 
 
 FIRST, SECOND = range(2)
 
 
-def start(update, _):
+async def start(update, _):
 
     keyboard = [
         [InlineKeyboardButton(text="Вперед", callback_data='А'), ],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text(text='А', reply_markup=reply_markup)
+    await update.message.reply_text(text='А', reply_markup=reply_markup)
     return FIRST
 
 
-def button_forward(update, _):
+async def button_forward(update, _):
 
     query = update.callback_query
     query.answer()
@@ -28,11 +28,11 @@ def button_forward(update, _):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    query.edit_message_text(text='В', reply_markup=reply_markup)
+    await query.edit_message_text(text='В', reply_markup=reply_markup)
     return SECOND
 
 
-def button_back(update, _):
+async def button_back(update, _):
     query = update.callback_query
     query.answer()
 
@@ -41,13 +41,13 @@ def button_back(update, _):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    query.edit_message_text(text='А', reply_markup=reply_markup)
+    await query.edit_message_text(text='А', reply_markup=reply_markup)
     return FIRST
 
 
 if __name__ == '__main__':
-    updater = Updater(token='5871619023:AAHHF2nCVLj5zHezoxSfWDXJQ9vN4f1jiCM')
-    dispatcher = updater.dispatcher
+
+    updater = ApplicationBuilder().token('5871619023:AAHHF2nCVLj5zHezoxSfWDXJQ9vN4f1jiCM').build()
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
@@ -62,7 +62,6 @@ if __name__ == '__main__':
         fallbacks=[CommandHandler('start', start)],
     )
 
-    dispatcher.add_handler(conv_handler)
+    updater.add_handler(conv_handler)
 
-    updater.start_polling()
-    updater.idle()
+    updater.run_polling()
